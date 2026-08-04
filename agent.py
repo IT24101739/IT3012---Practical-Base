@@ -60,6 +60,19 @@ class ModelBasedAgent:
         if percept.get('wall_right') or percept.get('toxin_right') or percept.get('opponent_right'):
             candidates.remove('Right')
         
+        if percept.get('opponent_nearby') and candidates:
+            if percept.get('opponent_up') and 'Down' in candidates:
+                action = 'Down'
+            elif percept.get('opponent_down') and 'Up' in candidates:
+                action = 'Up'
+            elif percept.get('opponent_left') and 'Right' in candidates:
+                action = 'Right'
+            elif percept.get('opponent_right') and 'Left' in candidates:
+                action = 'Left'
+            else:
+                action = candidates[0]
+            self.apply_move(action)
+            return action
 
         ## find a new cell to visit
         for action in candidates:
